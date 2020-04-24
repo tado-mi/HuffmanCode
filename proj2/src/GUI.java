@@ -13,10 +13,10 @@ import javax.swing.*;
 public class GUI {
 	static int x;
 	static int y;
-	
-	
+
+
 	public static void main(String args[]) {
-		myBST<Line> myTree = new myBST<Line>();
+		// myBST<Line> myTree = new myBST<Line>();
 		JFrame f = new JFrame("Draw a Red Line");
 	    f.setSize(300, 300);
 	    f.setLocation(300, 300);
@@ -30,13 +30,13 @@ public class GUI {
 	                    pointStart = e.getPoint();
 	                }
 	                public void mouseClicked(MouseEvent e) {
-	                	
+
 	                	x = e.getX();
 	                	y = e.getY();
-	                	
+
 	                	repaint();
 	                }
-	         
+
 	                public void mouseReleased(MouseEvent e) {
 	                    pointStart = null;
 	                }
@@ -53,7 +53,7 @@ public class GUI {
 	            });
 	        }
 	        public void paint(Graphics g) {
-	        
+
 	            super.paint(g);
 	            if (pointStart != null) {
 	                g.setColor(Color.RED);
@@ -62,7 +62,7 @@ public class GUI {
 	        }
 	    };
 	    f.add(p);
-	    f.setVisible(true); 
+	    f.setVisible(true);
 	    f.setLocationRelativeTo(null);
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
