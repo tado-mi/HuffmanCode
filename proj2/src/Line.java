@@ -1,3 +1,5 @@
+package src;
+
 public class Line implements Comparable<Line> {
 
 	static final int LEFT = 1, RIGHT = -1, INTERSECT = 0;

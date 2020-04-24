@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -33,21 +35,15 @@ public class LocatorGUI extends JPanel implements MouseListener {
 
 	}
 
-	public static void main(String args[]) {
-
-		String filename = args[0];
-		LocatorGUI test = new LocatorGUI(filename);
-
-
-	}
-
 	public void paintComponent(Graphics g) {
 
-		g.setColor(new Color(0, 255, 255));
-		g.fillRect(0, 0, s, s);
+		// g.setColor(new Color(0, 255, 255));
+		// g.fillRect(0, 0, s, s);
 
-		g.setColor(Color.RED);
+		g.setColor(Color.BLACK);
 		for (Line line: locator.root.getList()) {
+
+			System.out.println(line);
 
 			int ax = (int) line.A.x * s,
 				ay = (int) line.A.y * s,
@@ -104,6 +100,8 @@ public class LocatorGUI extends JPanel implements MouseListener {
 			}
 
 		}
+
+		repaint();
 
 	}
 
