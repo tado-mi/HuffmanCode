@@ -11,20 +11,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class TesterClass extends JPanel implements MouseListener {
+
 	static double sum = 0.0;
-	static ArrayList<Integer> x1;
-	static ArrayList<Integer> y1;
-	static ArrayList<Integer> x2;
-	static ArrayList<Integer> y2;
-	static ArrayList<Integer> list;
-	static int x111;
-	static myBST<Line> tree1 = new myBST<>();
-	static ArrayList<Line> LineList = new ArrayList<>();
+
 
 	public static int pointCount;
 
-	static int scaleX = 500, scaleY = 500;
-
+	int scaleX = 500, scaleY = 500;
 
 	static Point point1 = new Point(-100, -100);
 	static Point point2 = new Point(-100, -100);
@@ -35,32 +28,42 @@ public class TesterClass extends JPanel implements MouseListener {
 
 	}
 
+	public static Tree<Line> tree;
 
-	public static void main(String args[]) throws FileNotFoundException {
+	public static void main(String args[]) {
 
-		TesterClass test = new TesterClass();
-		File file = new File(args[0]);
-		// getting values from the console
-		Scanner scan = new Scanner(file);
-		x111 = (scan.nextInt());
-		for(int i=0;i<x111;i++) {
-			double x=scan.nextDouble();
-			double y = (scan.nextDouble());
+		String filename = args[0];
+		Scanner scan;
+
+		try {
+			scan = new Scanner(new File(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println(" ---- file " + filename + " was not found ---- ");
+			return;
+		}
+
+		tree = new Tree<Line>();
+
+		int n = scan.nextInt();
+		for (int i = 0; i < n; i = i + 1) {
+
+			double x = scan.nextDouble();
+			double y = scan.nextDouble();
 			Point p = new Point(x, y);
-			x = (scan.nextDouble());
-			y = (scan.nextDouble());
+
+			x = scan.nextDouble();
+			y = scan.nextDouble();
 			Point q = new Point(x, y);
-			Line l = new Line(p, q);
-			LineList.add(l);
-			tree1.insert(l);
+
+			tree.insert(new Line(p, q));
 
 		}
 
 
-		double avg = avgPathLength(tree1);
+		double avg = avgPathLength(tree);
 		System.out.println("The avg path iss " + avg);
 
-
+		TesterClass test = new TesterClass();
 		JFrame frame = new JFrame("Frame");
 		frame.add(test);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,44 +74,83 @@ public class TesterClass extends JPanel implements MouseListener {
 	}
 
 
+	public void paintComponent(Graphics g) {
+
+		g.setColor(new Color(0, 255, 255));
+		g.fillRect(0,0, scaleX, scaleY);
 
 
+		g.setColor(Color.RED);
 
-	public static void printNode(MyTreeNode<Line> node) {
-		MyTreeNode<Line> n1 = node;
-		Line l = node.data;
-		System.out.println("The line separating the two points have end points :" + l);
-	}
+		for (Line l:  tree.getList()) {
 
-	public static void preOrdertraversal(MyTreeNode<Line> parent, int count) {
+			System.out.println(l);
 
-		if (parent != null) {
-			// System.out.println(parent.data);
-
-			if (parent.leftChild == null && parent.rightChild == null) {
-				// reached the leaf
-				list.add(count);
-
-				sum = sum + count;
-			}
-
-			count += 1;
-			preOrdertraversal(parent.leftChild, count);
-
-			preOrdertraversal(parent.rightChild, count);
+			g.drawLine((int) (l.A.x * scaleX),(int) (l.A.y * scaleY), (int) (l.B.x * scaleX), (int) (l.B.y * scaleY));
 
 		}
 
+		//}
+
 	}
 
+	public static double avgPathLength(Tree<Line> root) {
 
+		List list = root.getList();
+
+		double size = (double) list.size();
+		double avg = sum / size;
+
+		return avg;
+
+	}
+
+	public static String search(Tree<Line> root, Point p1, Point p2) {
+
+		if (root == null) {
+			return "points in the same region ";
+		}
+
+		Line l = root.data;
+		int RIGHT = Line.RIGHT, LEFT = Line.LEFT;
+
+		if (p1.sideOf(l) == RIGHT) {
+
+			if (p2.sideOf(l) == RIGHT) {
+
+				root = root.rightChild;
+				if (root == null) {
+					return "points in the same region";
+				}
+				return search(root, p1, p2);
+
+			}
+
+		} else if (p1.sideOf(l) == LEFT) {
+
+			if (p2.sideOf(l) == LEFT) {
+
+				root = root.leftChild;
+
+				if (root == null) {
+					return "points in the same region";
+				}
+				return search(root, p1, p2);
+
+			}
+
+		}
+
+		return "points are separated with " + l.toString();
+
+	}
+
+	// mouse methods
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
 		double x = e.getX();
 		double y = e.getY();
-
-
 
 		pointCount++;
 		Graphics g = getGraphics();
@@ -118,7 +160,6 @@ public class TesterClass extends JPanel implements MouseListener {
 		x = x /scaleX;
 		y = y / scaleY;
 		if (pointCount % 2 == 1) {
-
 
 			point1.x = x;
 			point1.y = y;
@@ -133,9 +174,9 @@ public class TesterClass extends JPanel implements MouseListener {
 			System.out.println("The point one has values "+point1.x+" "+point1.y);
 			System.out.println("The point two has values "+point2.x+" "+point2.y);
 
-			tree1.printPreOrder();
+			// tree.printPreOrder();
 
-			search(tree1.root, point1, point2);
+			search(tree, point1, point2);
 			System.out.println();
 
 
@@ -167,98 +208,6 @@ public class TesterClass extends JPanel implements MouseListener {
 		// TODO Auto-generated method stubu
 
 	}
-	public void paintComponent(Graphics g) {
-
-		g.setColor(new Color(0, 255, 255));
-		g.fillRect(0,0, scaleX, scaleY);
 
 
-		g.setColor(Color.RED);
-
-		for (Line l:  LineList) {
-
-			System.out.println(l);
-
-			g.drawLine((int) (l.A.x * scaleX),(int) (l.A.y * scaleY), (int) (l.B.x * scaleX), (int) (l.B.y * scaleY));
-
-		}
-
-		//}
-
-	}
-
-	public static double avgPathLength(myBST<Line> obj) {
-		list = new ArrayList<>();
-
-		preOrdertraversal(obj.root, 0);
-		//System.out.println(list.toString());
-		double size = (double) list.size();
-		double avg = sum / size;
-		return avg;
-	}
-	public void search(MyTreeNode<Line>root,Point p1,Point p2) {
-
-		if(root==null) {
-			System.out.println("points in the same region ");
-			return;
-		}
-
-		Line l= root.data;
-		int RIGHT = Line.RIGHT, LEFT = Line.LEFT;
-
-		if(p1.sideOf(l) == RIGHT) {
-
-			//p1 is on the right of the line
-			if(p2.sideOf(l) == RIGHT) {
-				//p2 is also on the right side
-
-				root=root.rightChild;
-				//System.out.println(root.data);
-				//calling the search method again to check on the rightChild of the tree now
-				if(root!=null)
-				search(root,p1,p2);
-				else {
-					System.out.println("points in the same region and the current root is null ");
-					return;
-				}
-			}
-			else {
-
-				//p2 is on the left side
-				//have to call a method which will print the node data
-				//IMPOOOORTANT
-				TesterClass.printNode(root);
-				return;
-			}
-		}
-
-		else if(p1.sideOf(l) == LEFT) {
-			//p1 is on the left of line l
-
-			if(p2.sideOf(l) == LEFT) {
-				//p2 is on the left of line l
-
-				root=root.leftChild;
-				//System.out.println(root.data);
-				//calling the search method again to check on the leftChild of the tree now
-				if(root!=null)
-				search(root,p1,p2);
-				else {
-					System.out.println("points in the same region");
-					return;
-				}
-			}
-			else {
-
-				//p2 is on the right side
-				//have to call a method which will print the node data
-				//IMPOOOORTANT
-				TesterClass.printNode(root);
-				return;
-
-			}
-
-		}
-
-	}
 }
