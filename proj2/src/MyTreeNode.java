@@ -5,21 +5,21 @@ public class MyTreeNode<T extends Comparable<T>> {
 	public MyTreeNode<T> rightChild;
 	public  MyTreeNode<T> parent;
 	public MyTreeNode<T> mynode;
-	public Point Var = new Point();
-	int COUNTERCLOCKWISE =-1; 
+	public Point Var = new Point(0, 0);
+	int COUNTERCLOCKWISE =-1;
 	int CLOCKWISE =1;
 	int COLINEAR=0;
 	public MyTreeNode(){
-		
+
 	}
 	public MyTreeNode(T data){
 		this.data=data;
 	}
-	public String toString() { 
-		return (String)parent.data; 
+	public String toString() {
+		return (String)parent.data;
 	}
-	
-	
+
+
 
 	public void preOrdertraversal(MyTreeNode<T> parent) {
 		if (parent != null) {
@@ -30,7 +30,7 @@ public class MyTreeNode<T extends Comparable<T>> {
 
 		}
 	}
-	
+
 
 	public void postOrdertraversal(MyTreeNode parent) {
 		if (parent != null) {
@@ -45,14 +45,14 @@ public class MyTreeNode<T extends Comparable<T>> {
 
 	public void inOrdertraversal(MyTreeNode<T> parent, int count) {
 		if (parent != null) {
-			
+
 			inOrdertraversal(parent.leftChild,count+1);
 			for(int i=0;i<count;i++) {
 				System.out.print(" ");
 			}
 			System.out.println(parent.data);
 			inOrdertraversal(parent.rightChild,count+1);
-		
+
 	}
 	}
 	public MyTreeNode<T> delete(MyTreeNode<T> node, T x) {
@@ -91,7 +91,7 @@ public class MyTreeNode<T extends Comparable<T>> {
 			data = x;
 			return;
 		}
-		
+
 //		MyTreeNode<T> node = new MyTreeNode<T>();
 //		node.data = x;
 
@@ -127,8 +127,8 @@ public class MyTreeNode<T extends Comparable<T>> {
 	}
 
 	public int compareUS(Line L, Line K) {
-		return Var.compareLines(L, K);
-	
+		return L.compareTo(K);
+
 	}
 	private int compare(T d1, T d2) {
 
@@ -144,21 +144,21 @@ public class MyTreeNode<T extends Comparable<T>> {
 //	public MyTreeNode<Line> search(myBST<Line> parent,Point p1,Point p2) {
 //		System.out.println("working.....");
 //		return search(parent.root,p1,p2);
-//		
-//		
+//
+//
 //	}
-	
+
 //	public MyTreeNode<Line> search(MyTreeNode<Line> root,Point p1,Point p2) {
-//		
+//
 //		if(root==null) {
 //			System.out.println("points in the same region ");
 //			return null;
 //		}
 ////		int s1 = ccw()
 //		Line l= root.data;
-//		
+//
 //		if(l.magic(p1)==-1) {
-//			
+//
 //			//p1 is on the right of the line
 //			if(l.magic(p2)==-1) {
 //				//p2 is also on the right side
@@ -166,7 +166,7 @@ public class MyTreeNode<T extends Comparable<T>> {
 //				root=root.rightChild;
 //				//calling the search method again to check on the rightChild of the tree now
 //				 search(root,p1,p2);
-//				
+//
 //			}
 //			else {
 //				System.out.println("first else is hereeee");
@@ -177,10 +177,10 @@ public class MyTreeNode<T extends Comparable<T>> {
 //				return null;
 //			}
 //		}
-//		
+//
 //		else if(l.magic(p1)==1) {
 //			//p1 is on the left of line l
-//			
+//
 //			if(l.magic(p2)==1) {
 //				//p2 is on the left of line l
 //				System.out.println("Both points on the leftttttt");
@@ -195,13 +195,13 @@ public class MyTreeNode<T extends Comparable<T>> {
 //				//IMPOOOORTANT
 //				TesterClass.printNode(root);
 //				return null;
-//				
+//
 //			}
-//			
+//
 //		}
 //		return root;
-//	}		
-//	}	
+//	}
+//	}
 //		int search1 = ccw(p1,root.data.p1, root.data.p2); // generating two sides
 //        int search2 = ccw(p2,root.data.p1, root.data.p2);
 //
@@ -250,5 +250,3 @@ public class MyTreeNode<T extends Comparable<T>> {
 		}
 
 }
-
-
